@@ -11,6 +11,10 @@ import Link from 'next/link';
 import { APP_NAME } from '../config.js';
 import { signout, getCookie, getLocalStorage } from '../actions/auth';
 import { useSelector } from 'react-redux';
+import NProgress from 'nprogress';
+import Router from 'next/router';
+import '../node_modules/nprogress/nprogress.css';
+
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => {
@@ -18,7 +22,10 @@ const Header = () => {
   };
 
   const user = getLocalStorage('user');
-  console.log(user);
+
+  Router.onRouteChangeStart = (url) => NProgress.start();
+  Router.onRouteChangeComplete = (url) => NProgress.done();
+  Router.onRouteChangeError = (url) => NProgress.start();
 
   return (
     <div>

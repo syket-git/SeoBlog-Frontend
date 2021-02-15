@@ -14,6 +14,13 @@ class MyDocument extends Document {
             rel="stylesheet"
             href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           />
+
+          <link rel="preconnect" href="https://fonts.gstatic.com" />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+            rel="stylesheet"
+          />
+          <link rel="stylesheet" href="/static/css/styles.css" />
         </Head>
         <body>
           <Main />

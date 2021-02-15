@@ -1,0 +1,8 @@
+#nprogress .bar {
+    height: 3px !important;
+    background-color: #ff595e !important;
+}
+body {
+    font-family: "Poppins", sans-serif !important;
+    font-size: 15px !important;
+}
