@@ -41,9 +41,13 @@ const CreateBlog = () => {
     }
   };
 
+  const category = useSelector((state) => state.category);
+  const tag = useSelector((state) => state.tag);
+
   const [body, setBody] = useState(getBlogDataFromLS());
   const [title, setTitle] = useState(getBlogTitleFromLS());
-
+  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedTag, setSelectedTag] = useState([]);
   const { handleSubmit, errors, register, reset } = useForm();
 
   const submit = (data) => {
@@ -63,8 +67,35 @@ const CreateBlog = () => {
     localStorage.setItem('title', e.target.value);
   };
 
-  const category = useSelector((state) => state.category);
-  const tag = useSelector((state) => state.tag);
+  //Get Selected Category
+  const handleCategory = (e) => () => {
+    const checkedIndex = selectedCategory.indexOf(e);
+    const all = [...selectedCategory];
+    console.log(checkedIndex);
+    if (checkedIndex === -1) {
+      all.push(e);
+    } else {
+      all.splice(checkedIndex, 1);
+    }
+
+    console.log(all);
+    setSelectedCategory(all);
+  };
+
+  //Get Selected Tag
+  const handleTag = (e) => () => {
+    const checkedIndex = selectedTag.indexOf(e);
+    const all = [...selectedTag];
+    console.log(checkedIndex);
+    if (checkedIndex === -1) {
+      all.push(e);
+    } else {
+      all.splice(checkedIndex, 1);
+    }
+
+    console.log(all);
+    setSelectedTag(all);
+  };
 
   const createBlogForm = () => {
     return (
@@ -108,6 +139,17 @@ const CreateBlog = () => {
         </div>
         <div className="col-md-3 mt-4">
           <div>
+            <h6>Featured Image</h6>
+            <hr />
+            <div className="mb-4">
+              <p className="text-muted mb-1">Max size: 1mb</p>
+              <label className="btn btn-outline-info">
+                Upload featured image
+                <input type="file" accept="image/*" hidden />
+              </label>
+            </div>
+          </div>
+          <div>
             <h6>Categories</h6>
             <hr />
             <div className={style.category}>
@@ -117,6 +159,7 @@ const CreateBlog = () => {
                   category?.categories?.map((c, i) => (
                     <div key={i} className="form-check mb-2">
                       <input
+                        onChange={handleCategory(c._id)}
                         className="form-check-input"
                         type="checkbox"
                         id={c.name}
@@ -138,6 +181,7 @@ const CreateBlog = () => {
                   tag?.tags?.map((t, i) => (
                     <div key={i} className="form-check mb-2">
                       <input
+                        onChange={handleTag(t._id)}
                         className="form-check-input"
                         type="checkbox"
                         id={i}
