@@ -4,7 +4,7 @@ import {
   postCategory,
   categories,
   removeCategory,
-} from '../../actions/category';
+} from '../../../actions/category';
 import { connect, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 

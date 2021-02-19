@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { signin } from '../../actions/auth';
+import { signin } from '../../../actions/auth';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
