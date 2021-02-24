@@ -1,7 +1,7 @@
 import Layout from '../../../components/Layout';
 import Admin from '../../../components/Admin';
-import CategoryComponent from '../../../components/CategoryComponent/CategoryComponent';
-import TagComponent from '../../../components/TagComponent/TagComponent';
+import CategoryComponent from '../../../components/crud/CategoryComponent/CategoryComponent';
+import TagComponent from '../../../components/crud/TagComponent/TagComponent';
 
 const CategoryTag = () => {
   return (

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { createTag, tags, removeTag } from '../../actions/tag';
+import { createTag, tags, removeTag } from '../../../actions/tag';
 import { connect, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 

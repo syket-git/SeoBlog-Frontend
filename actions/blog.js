@@ -1,24 +1,55 @@
 import { API } from '../config';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
+
 const token = Cookies.get('token');
 
-export const createBlog = (blog) => async (dispatch) => {
+export const createBlog = ({
+  title,
+  body,
+  photo,
+  categories,
+  tags,
+  setUploading,
+  setSelectedTag,
+  setSelectedCategory,
+  setFeaturedImage,
+  setBody,
+  setTitle,
+}) => async (dispatch) => {
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('body', body);
+  formData.append('photo', photo);
+  formData.append('categories', categories);
+  formData.append('tags', tags);
   try {
+    setUploading(true);
     fetch(`${API}/blog`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        Accept: 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(blog),
+      body: formData,
     })
       .then((res) => res.json())
       .then((json) => {
         if (json.error) {
+          setUploading(false);
           toast.error(json.error);
         } else if (json.message) {
+          setUploading(false);
           toast.success(json.message);
+          if (typeof window !== 'undefined') {
+            localStorage.removeItem('title');
+            localStorage.removeItem('blog');
+          }
+          setBody('');
+          setTitle('');
+          setSelectedTag([]);
+          setSelectedCategory([]);
+          setFeaturedImage(null);
         }
       });
   } catch (error) {

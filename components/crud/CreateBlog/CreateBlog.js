@@ -3,18 +3,18 @@ import { useEffect, useState } from 'react';
 import Router from 'next/router';
 import dynamic from 'next/dynamic';
 import { withRouter } from 'next/router';
-import { getCookie, getLocalStorage } from '../../../actions/auth';
-import { tags } from '../../../actions/category';
 import { createBlog } from '../../../actions/blog';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
 import style from './CreateBlog.module.css';
+import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 //Dynamically Import ReactQuill
 const ReactQuil = dynamic(() => import('react-quill'), { ssr: false });
 import '../../../node_modules/react-quill/dist/quill.snow.css';
 
-const CreateBlog = () => {
+const CreateBlog = ({ createBlog }) => {
   //Blog data get from localStorage
   const getBlogDataFromLS = () => {
     if (typeof window === 'undefined') return '';
@@ -46,13 +46,32 @@ const CreateBlog = () => {
 
   const [body, setBody] = useState(getBlogDataFromLS());
   const [title, setTitle] = useState(getBlogTitleFromLS());
+  const [featuredImage, setFeaturedImage] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [selectedTag, setSelectedTag] = useState([]);
+  const [uploading, setUploading] = useState(false);
   const { handleSubmit, errors, register, reset } = useForm();
 
   const submit = (data) => {
-    data.body = body;
-    console.log(data);
+    if (selectedCategory.length <= 0) {
+      toast.error('Please select at least one category');
+    } else if (selectedTag.length <= 0) {
+      toast.error('Please select at least one tag');
+    } else {
+      createBlog({
+        title: title,
+        body: body,
+        photo: featuredImage !== null ? featuredImage : '',
+        categories: selectedCategory,
+        tags: selectedTag,
+        setUploading,
+        setFeaturedImage,
+        setSelectedCategory,
+        setSelectedTag,
+        setBody,
+        setTitle,
+      });
+    }
   };
 
   const handleBodyChange = (e) => {
@@ -71,30 +90,24 @@ const CreateBlog = () => {
   const handleCategory = (e) => () => {
     const checkedIndex = selectedCategory.indexOf(e);
     const all = [...selectedCategory];
-    console.log(checkedIndex);
+
     if (checkedIndex === -1) {
       all.push(e);
     } else {
       all.splice(checkedIndex, 1);
     }
-
-    console.log(all);
-    setSelectedCategory(all);
   };
 
   //Get Selected Tag
   const handleTag = (e) => () => {
     const checkedIndex = selectedTag.indexOf(e);
     const all = [...selectedTag];
-    console.log(checkedIndex);
+
     if (checkedIndex === -1) {
       all.push(e);
     } else {
       all.splice(checkedIndex, 1);
     }
-
-    console.log(all);
-    setSelectedTag(all);
   };
 
   const createBlogForm = () => {
@@ -131,9 +144,15 @@ const CreateBlog = () => {
               {errors.body && <p className="text-danger">Body is required</p>}
             </div>
             <div>
-              <button type="submit" className="btn btn-primary">
-                Publish
-              </button>
+              {uploading ? (
+                <button disabled className="btn btn-secondary">
+                  Uploading...
+                </button>
+              ) : (
+                <button type="submit" className="btn btn-primary">
+                  Publish
+                </button>
+              )}
             </div>
           </form>
         </div>
@@ -142,10 +161,24 @@ const CreateBlog = () => {
             <h6>Featured Image</h6>
             <hr />
             <div className="mb-4">
+              {featuredImage !== null && (
+                <div className={style.showImageWrapper}>
+                  <img
+                    className={style.image}
+                    src={URL.createObjectURL(featuredImage)}
+                    alt=""
+                  />
+                </div>
+              )}
               <p className="text-muted mb-1">Max size: 1mb</p>
               <label className="btn btn-outline-info">
                 Upload featured image
-                <input type="file" accept="image/*" hidden />
+                <input
+                  onChange={(e) => setFeaturedImage(e.target.files[0])}
+                  type="file"
+                  accept="image/*"
+                  hidden
+                />
               </label>
             </div>
           </div>
@@ -230,4 +263,8 @@ CreateBlog.formats = [
   'code-block',
 ];
 
-export default withRouter(CreateBlog);
+CreateBlog.prototype = {
+  createBlog: PropTypes.func.isRequired,
+};
+
+export default withRouter(connect(null, { createBlog })(CreateBlog));
