@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 
 const token = Cookies.get('token');
-
+console.log(token);
 export const createBlog = ({
   title,
   body,
@@ -23,6 +23,10 @@ export const createBlog = ({
   formData.append('photo', photo);
   formData.append('categories', categories);
   formData.append('tags', tags);
+  if (token === undefined) {
+    toast.error("Can't get Token. Please sign in again.");
+    return;
+  }
   try {
     setUploading(true);
     fetch(`${API}/blog`, {

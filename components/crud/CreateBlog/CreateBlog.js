@@ -9,6 +9,7 @@ import { useSelector, connect } from 'react-redux';
 import style from './CreateBlog.module.css';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
+import Spinner from '../../Spinner';
 
 //Dynamically Import ReactQuill
 const ReactQuil = dynamic(() => import('react-quill'), { ssr: false });
@@ -96,6 +97,7 @@ const CreateBlog = ({ createBlog }) => {
     } else {
       all.splice(checkedIndex, 1);
     }
+    setSelectedCategory(all);
   };
 
   //Get Selected Tag
@@ -108,6 +110,7 @@ const CreateBlog = ({ createBlog }) => {
     } else {
       all.splice(checkedIndex, 1);
     }
+    setSelectedTag(all);
   };
 
   const createBlogForm = () => {
