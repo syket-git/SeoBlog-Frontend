@@ -55,10 +55,16 @@ const Header = () => {
             {user !== null && (
               <React.Fragment>
                 <NavItem>
+                  <Link href="/blogs">
+                    <NavLink style={{ cursor: 'pointer' }}>Blogs</NavLink>
+                  </Link>
+                </NavItem>
+                <NavItem>
                   <Link href={`${user?.role === 1 ? '/admin' : '/user'}`}>
                     <NavLink style={{ cursor: 'pointer' }}>Dashboard</NavLink>
                   </Link>
                 </NavItem>
+
                 <NavItem>
                   <NavLink onClick={signout} style={{ cursor: 'pointer' }}>
                     Signout

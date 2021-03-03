@@ -4,6 +4,8 @@ import { toast } from 'react-toastify';
 
 const token = Cookies.get('token');
 console.log(token);
+
+//Create Blog
 export const createBlog = ({
   title,
   body,
@@ -59,4 +61,19 @@ export const createBlog = ({
   } catch (error) {
     toast.error(error?.response?.body);
   }
+};
+
+//ListAllCategoriesAndTags
+
+export const listAllCategoriesAndTags = () => {
+  return fetch(`${API}/blogs-categories-tags`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+    },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => console.log(err));
 };
