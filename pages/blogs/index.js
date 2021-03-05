@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import Layout from '../../components/Layout';
 import Card from '../../components/blog/Card';
-import { listAllCategoriesAndTags } from '../../actions/blog';
+import { listAllBlogsCategoriesAndTags } from '../../actions/blog';
 import { API, DOMAIN, APP_NAME, APP_ID } from '../../config';
 import { withRouter } from 'next/router';
 
-const Blogs = ({ blogs, tags, size, categories, router }) => {
+const Blogs = ({
+  blogs,
+  tags,
+  totalBlogs,
+  limitBlogs,
+  skipBlogs,
+  categories,
+  router,
+}) => {
   const head = () => (
     <Head>
       <title>Programming blog | {APP_NAME}</title>
@@ -32,6 +40,38 @@ const Blogs = ({ blogs, tags, size, categories, router }) => {
     </Head>
   );
 
+  console.log(limitBlogs);
+  console.log(skipBlogs);
+
+  const [limit, setLimit] = useState(limitBlogs);
+  const [skip, setSkip] = useState(0);
+  const [size, setSize] = useState(totalBlogs);
+  const [loadedBlogs, setLoadedBlogs] = useState([]);
+
+  const loadMore = () => {
+    let toSkip = skip + limit;
+    listAllBlogsCategoriesAndTags(toSkip, limit).then((data) => {
+      if (data.error) {
+        console.log(error);
+      } else {
+        setLoadedBlogs([...loadedBlogs, ...data.blogs]);
+        setSize(data.size);
+        setSkip(toSkip);
+      }
+    });
+  };
+
+  console.log('size', size);
+  console.log('limit', limit);
+
+  const loadMoreButton = () =>
+    size > 0 &&
+    size >= limit && (
+      <button onClick={loadMore} className="btn btn-outline-primary btn-sm">
+        Load more
+      </button>
+    );
+
   const showAllBlogs = () => {
     return blogs?.map((blog, i) => {
       return <Card blog={blog} i={i} />;
@@ -53,6 +93,12 @@ const Blogs = ({ blogs, tags, size, categories, router }) => {
     ));
   };
 
+  const showLoadedBlogs = () => {
+    return loadedBlogs?.map((blog, i) => {
+      return <Card blog={blog} i={i} />;
+    });
+  };
+
   return (
     <React.Fragment>
       {head()}
@@ -72,11 +118,9 @@ const Blogs = ({ blogs, tags, size, categories, router }) => {
               </section>
             </header>
           </div>
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-md-12">{showAllBlogs()}</div>
-            </div>
-          </div>
+          <div className="container-fluid">{showAllBlogs()}</div>
+          <div className="container-fluid">{showLoadedBlogs()}</div>
+          <div className="text-center pb-5 pt-5">{loadMoreButton()}</div>
         </main>
       </Layout>
     </React.Fragment>
@@ -84,7 +128,9 @@ const Blogs = ({ blogs, tags, size, categories, router }) => {
 };
 
 Blogs.getInitialProps = () => {
-  return listAllCategoriesAndTags().then((data) => {
+  let skip = 0;
+  let limit = 2;
+  return listAllBlogsCategoriesAndTags(skip, limit).then((data) => {
     if (data.error) {
       toast.error(error);
     } else {
@@ -92,7 +138,9 @@ Blogs.getInitialProps = () => {
         blogs: data.blogs,
         tags: data.tags,
         categories: data.categories,
-        size: data.size,
+        totalBlogs: data.size,
+        limitBlogs: limit,
+        skipBlogs: skip,
       };
     }
   });

@@ -22,7 +22,7 @@ const Card = ({ blog, i }) => {
 
   return (
     <article key={i}>
-      <div className="lead">
+      <div>
         <header>
           <Link href={`/blogs/${blog.slug}`}>
             <a>
@@ -32,7 +32,7 @@ const Card = ({ blog, i }) => {
         </header>
         <section>
           <div className="mark ml-1 pt-2 pb-2">
-            Written by {blog.postedBy.name} | Published{' '}
+            Written by {blog?.postedBy?.name} | Published{' '}
             {moment(blog.updatedAt).fromNow()}
           </div>
         </section>

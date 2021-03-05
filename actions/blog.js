@@ -65,9 +65,30 @@ export const createBlog = ({
 
 //ListAllCategoriesAndTags
 
-export const listAllCategoriesAndTags = () => {
+export const listAllBlogsCategoriesAndTags = (skip, limit) => {
+  const data = {
+    limit,
+    skip,
+  };
   return fetch(`${API}/blogs-categories-tags`, {
     method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+//Single Blog
+
+export const singleBlog = (slug) => {
+  return fetch(`${API}/blog/${slug}`, {
+    method: 'GET',
     headers: {
       Accept: 'application/json',
     },
