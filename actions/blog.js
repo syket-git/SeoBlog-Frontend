@@ -98,3 +98,20 @@ export const singleBlog = (slug) => {
     })
     .catch((err) => console.log(err));
 };
+
+//Related Blog
+
+export const RelatedBlogs = (blog) => {
+  return fetch(`${API}/blogs/related`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(blog),
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => console.log(err));
+};

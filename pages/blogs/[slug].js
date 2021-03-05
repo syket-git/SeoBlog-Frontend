@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Head from 'next/head';
 import Layout from '../../components/Layout';
-import { singleBlog } from '../../actions/blog';
+import { singleBlog, RelatedBlogs } from '../../actions/blog';
 import { API, DOMAIN, APP_NAME, APP_ID } from '../../config';
 import { withRouter } from 'next/router';
 import moment from 'moment';
 import renderHTML from 'react-render-html';
+import SmallCard from '../../components/blog/SmallCard';
+import { toast } from 'react-toastify';
 
 const SingleBlog = ({ blog }) => {
   const head = () => (
@@ -29,6 +31,23 @@ const SingleBlog = ({ blog }) => {
     </Head>
   );
 
+  //State
+  const [relatedBlogs, setRelatedBlogs] = useState([]);
+
+  const showRelatedBlogs = () => {
+    RelatedBlogs({ blog }).then((data) => {
+      if (data?.error) {
+        toast.error(data.error);
+      } else {
+        setRelatedBlogs(data);
+      }
+    });
+  };
+
+  useEffect(() => {
+    showRelatedBlogs();
+  }, [blog]);
+
   const showCategories = (blog) => {
     return blog?.categories.map((c, i) => (
       <Link key={i} href={`/categories/${c.name}`}>
@@ -44,6 +63,17 @@ const SingleBlog = ({ blog }) => {
         </a>
       </Link>
     ));
+  };
+
+  const showRelated = () => {
+    return (
+      relatedBlogs?.length > 0 &&
+      relatedBlogs.map((blog, i) => (
+        <div key={i} className="col-md-4">
+          <SmallCard blog={blog} />
+        </div>
+      ))
+    );
   };
 
   return (
@@ -103,8 +133,7 @@ const SingleBlog = ({ blog }) => {
                 <div className="container mt-5">
                   <h4>Related Blogs</h4>
                   <hr />
-
-                  <p>Show Related blogs</p>
+                  <div className="row">{showRelated()}</div>
                 </div>
               </section>
               <section>
@@ -126,7 +155,7 @@ const SingleBlog = ({ blog }) => {
 SingleBlog.getInitialProps = ({ query }) => {
   return singleBlog(query.slug).then((data) => {
     if (data.error) {
-      toast.error(error);
+      toast.error(data.error);
     } else {
       return {
         blog: data,
