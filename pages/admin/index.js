@@ -19,6 +19,9 @@ const Index = () => {
               <li className="list-group-item">
                 <Link href="/admin/crud/blog">Create blog</Link>
               </li>
+              <li className="list-group-item">
+                <Link href="/admin/crud/blogs">Update / Delete blog</Link>
+              </li>
             </ul>
           </div>
           <div className="col-md-8"></div>

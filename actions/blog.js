@@ -115,3 +115,50 @@ export const RelatedBlogs = (blog) => {
     })
     .catch((err) => console.log(err));
 };
+
+//List all Blogs
+export const listAllBlogs = () => {
+  return fetch(`${API}/blogs`, {
+    method: 'GET',
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+//Remove Blogs
+
+export const removeBlog = (slug, token) => {
+  return fetch(`${API}/blog/${slug}`, {
+    method: 'DELETE',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => console.log(err));
+};
+
+// Update Blog
+
+export const updateBlog = (blog, token, slug) => {
+  return fetch(`${API}/blog/${slug}`, {
+    method: 'PUT',
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: blog,
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => {
+      toast.error(err.response.body);
+    });
+};

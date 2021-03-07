@@ -6,6 +6,7 @@ import Card from '../../components/blog/Card';
 import { listAllBlogsCategoriesAndTags } from '../../actions/blog';
 import { API, DOMAIN, APP_NAME, APP_ID } from '../../config';
 import { withRouter } from 'next/router';
+import { toast } from 'react-toastify';
 
 const Blogs = ({
   blogs,
@@ -131,8 +132,11 @@ Blogs.getInitialProps = () => {
   let skip = 0;
   let limit = 2;
   return listAllBlogsCategoriesAndTags(skip, limit).then((data) => {
-    if (data.error) {
-      toast.error(error);
+    console.log(data);
+    if (data?.error) {
+      toast.error(data.error);
+    } else if (data === undefined) {
+      toast.error('Something went wrong! please relogin');
     } else {
       return {
         blogs: data.blogs,
