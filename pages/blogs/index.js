@@ -41,9 +41,6 @@ const Blogs = ({
     </Head>
   );
 
-  console.log(limitBlogs);
-  console.log(skipBlogs);
-
   const [limit, setLimit] = useState(limitBlogs);
   const [skip, setSkip] = useState(0);
   const [size, setSize] = useState(totalBlogs);
@@ -61,9 +58,6 @@ const Blogs = ({
       }
     });
   };
-
-  console.log('size', size);
-  console.log('limit', limit);
 
   const loadMoreButton = () =>
     size > 0 &&
@@ -132,7 +126,6 @@ Blogs.getInitialProps = () => {
   let skip = 0;
   let limit = 2;
   return listAllBlogsCategoriesAndTags(skip, limit).then((data) => {
-    console.log(data);
     if (data?.error) {
       toast.error(data.error);
     } else if (data === undefined) {

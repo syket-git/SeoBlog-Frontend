@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { listAllBlogs, removeBlog } from '../../../actions/blog';
-import { getCookie } from '../../../actions/auth';
+import { getCookie, getLocalStorage } from '../../../actions/auth';
 import { toast } from 'react-toastify';
 import renderHTML from 'react-render-html';
 import moment from 'moment';
@@ -10,6 +11,7 @@ const ReadBlog = () => {
   const [loading, setLoading] = useState(false);
   const [selectItem, setSelectItem] = useState(null);
   const token = getCookie('token');
+  const AuthData = getLocalStorage('user');
 
   useEffect(() => {
     //call the all blogs function
@@ -53,6 +55,23 @@ const ReadBlog = () => {
     }
   };
 
+  //Show Update Button
+  const showUpdateButton = (blog) => {
+    if (token && AuthData !== null && AuthData.role === 0) {
+      return (
+        <Link href={`/user/crud/${blog?.slug}`}>
+          <a className="btn btn-sm btn-warning ml-2">Update</a>
+        </Link>
+      );
+    } else if (token && AuthData !== null && AuthData.role === 1) {
+      return (
+        <Link href={`/admin/crud/${blog?.slug}`}>
+          <a className="btn btn-sm btn-warning ml-2">Update</a>
+        </Link>
+      );
+    }
+  };
+
   //show all blogs
   const showAllBlogs = () =>
     blogs.map((blog, i) => (
@@ -79,7 +98,7 @@ const ReadBlog = () => {
         <div className="mt-2">
           <button
             onClick={() => confirmDelete(blog.slug)}
-            className={`btn ${
+            className={`btn btn-sm ${
               loading && selectItem === blog.slug
                 ? 'btn-secondary'
                 : 'btn-danger'
@@ -91,6 +110,7 @@ const ReadBlog = () => {
               <span>Delete</span>
             )}
           </button>
+          {showUpdateButton(blog)}
         </div>
       </div>
     ));

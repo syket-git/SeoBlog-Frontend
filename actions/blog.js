@@ -3,7 +3,6 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 
 const token = Cookies.get('token');
-console.log(token);
 
 //Create Blog
 export const createBlog = ({
@@ -146,19 +145,20 @@ export const removeBlog = (slug, token) => {
 
 // Update Blog
 
-export const updateBlog = (blog, token, slug) => {
+export const updateBlog = (formData, slug) => {
+  console.log(slug);
   return fetch(`${API}/blog/${slug}`, {
     method: 'PUT',
     headers: {
       Accept: 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: blog,
+    body: formData,
   })
     .then((res) => {
       return res.json();
     })
     .catch((err) => {
-      toast.error(err.response.body);
+      toast.error(err?.response?.body);
     });
 };
