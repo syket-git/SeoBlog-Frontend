@@ -55,28 +55,15 @@ export const categories = () => async (dispatch) => {
 };
 
 //Get single Category
-export const singleCategory = (slug) => async (dispatch) => {
-  try {
-    fetch(`${API}/category/${slug}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.error) {
-          toast.error(json.error);
-        } else {
-          dispatch({
-            type: CATEGORY,
-            payload: json,
-          });
-        }
-      });
-  } catch (err) {
-    toast.error(err?.response?.body);
-  }
+export const singleCategory = (slug) => {
+  return fetch(`${API}/category/${slug}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((res) => {
+    return res.json();
+  });
 };
 
 //Remove Category

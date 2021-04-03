@@ -55,28 +55,15 @@ export const tags = () => async (dispatch) => {
 };
 
 //Get single Tag
-export const singleTag = (slug) => async (dispatch) => {
-  try {
-    fetch(`${API}/tag/${slug}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((json) => {
-        if (json.error) {
-          toast.error(json.error);
-        } else {
-          dispatch({
-            type: TAG,
-            payload: json,
-          });
-        }
-      });
-  } catch (err) {
-    toast.error(err?.response?.body);
-  }
+export const singleTag = (slug) => {
+  return fetch(`${API}/tag/${slug}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((res) => {
+    return res.json();
+  });
 };
 
 //Remove Tag

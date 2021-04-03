@@ -75,14 +75,14 @@ const Blogs = ({
 
   const showAllCategories = () => {
     return categories?.map((c, i) => (
-      <Link key={i} href={`/categories/${c.name}`}>
+      <Link key={i} href={`/categories/${c.slug}`}>
         <a className="btn btn-info btn-sm ml-1 mr-1 mt-3">{c.name}</a>
       </Link>
     ));
   };
   const showAllTags = () => {
     return tags?.map((t, i) => (
-      <Link key={i} href={`/tags/${t.name}`}>
+      <Link key={i} href={`/tags/${t.slug}`}>
         <a className="btn btn-outline-info btn-sm ml-1 mr-1 mt-3">{t.name}</a>
       </Link>
     ));
@@ -98,7 +98,7 @@ const Blogs = ({
     <React.Fragment>
       {head()}
       <Layout>
-        <main>
+        <main className="container-fluid">
           <div className="container-fluid">
             <header>
               <div className="col-md-12 pt-3">

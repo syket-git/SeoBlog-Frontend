@@ -1,8 +1,9 @@
-import Link from 'next/link';
+import Router from 'next/router';
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { withRouter } from 'next/router';
 import { singleBlog, updateBlog } from '../../../actions/blog';
+import { getLocalStorage } from '../../../actions/auth';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -26,6 +27,9 @@ const UpdateBlog = ({ router }) => {
   const tag = useSelector((state) => state.tag);
 
   const { handleSubmit, errors, register, reset } = useForm();
+
+  //Get User from localStorage
+  const user = getLocalStorage('user');
 
   useEffect(() => {
     if (router.query.slug) {
@@ -61,6 +65,11 @@ const UpdateBlog = ({ router }) => {
           toast.error(data.error);
         } else {
           toast.success('Post updated successfully');
+          if (user && user?.role === 1) {
+            Router.replace('/admin');
+          } else if (user && user?.role === 0) {
+            Router.replace('/user');
+          }
         }
       });
     }

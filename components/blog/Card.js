@@ -7,26 +7,26 @@ const Card = ({ blog, i }) => {
   //Show Categories and Tags
   const showCategories = (blog) => {
     return blog.categories.map((c, i) => (
-      <Link key={i} href={`/categories/${c.name}`}>
+      <Link key={i} href={`/categories/${c.slug}`}>
         <a className="btn btn-info btn-sm ml-1 mr-1 mt-3">{c.name}</a>
       </Link>
     ));
   };
   const showTags = (blog) => {
     return blog.tags.map((t, i) => (
-      <Link key={i} href={`/tags/${t.name}`}>
+      <Link key={i} href={`/tags/${t.slug}`}>
         <a className="btn btn-outline-info btn-sm ml-1 mr-1 mt-3">{t.name}</a>
       </Link>
     ));
   };
 
   return (
-    <article key={i}>
+    <article key={i} className="mb-5">
       <div>
         <header>
           <Link href={`/blogs/${blog.slug}`}>
             <a>
-              <h2 className="pt-3 pb-3 font-weight-bold ">{blog.title}</h2>
+              <h4 className="pt-3 pb-3 font-weight-bold ">{blog.title}</h4>
             </a>
           </Link>
         </header>
@@ -47,7 +47,7 @@ const Card = ({ blog, i }) => {
             <section>
               <img
                 className="img img-fluid"
-                style={{ maxHeight: '150px', width: 'auto' }}
+                style={{ maxHeight: 'auto', width: '100%' }}
                 src={`${API}/blog/photo/${blog.slug}`}
                 alt={blog.title}
               />
