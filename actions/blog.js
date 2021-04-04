@@ -1,7 +1,7 @@
 import { API } from '../config';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
-
+import queryString from 'query-string';
 const token = Cookies.get('token');
 
 //Create Blog
@@ -161,4 +161,22 @@ export const updateBlog = (formData, slug) => {
     .catch((err) => {
       toast.error(err?.response?.body);
     });
+};
+
+// Search Blog
+export const searchBlog = (params) => {
+  console.log('search params', params);
+  const query = queryString.stringify(params);
+  console.log('query params', query);
+  return fetch(`${API}/blogs/search?${query}`, {
+    method: 'GET',
+    headers: {
+      Accepts: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .catch((err) => console.log(err));
 };

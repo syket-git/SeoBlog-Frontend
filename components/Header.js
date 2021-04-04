@@ -15,6 +15,7 @@ import NProgress from 'nprogress';
 import Router from 'next/router';
 import '../node_modules/nprogress/nprogress.css';
 
+import Search from '../Components/blog/Search';
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => {
@@ -28,7 +29,7 @@ const Header = () => {
   Router.onRouteChangeError = (url) => NProgress.start();
 
   return (
-    <div>
+    <React.Fragment>
       <Navbar color="dark" dark expand="md">
         <Link href="/">
           <NavLink style={{ cursor: 'pointer' }} className="font-weight-bold">
@@ -75,7 +76,8 @@ const Header = () => {
           </Nav>
         </Collapse>
       </Navbar>
-    </div>
+      <Search />
+    </React.Fragment>
   );
 };
 
