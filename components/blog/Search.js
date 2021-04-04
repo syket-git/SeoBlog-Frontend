@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { searchBlog } from '../../actions/blog';
 
 const Search = () => {
@@ -56,9 +57,30 @@ const Search = () => {
     </form>
   );
 
+  const searchedBlog = (results = []) => {
+    return (
+      <div className="jumbotron bg-white">
+        {message && <p className="pt-4 font-italic text-muted"> {message}</p>}
+        {results?.length > 0 &&
+          results?.map((blog, i) => (
+            <div key={i}>
+              <Link href={`/blogs/${blog?.slug}`}>
+                <a className="text-primary">{blog.title}</a>
+              </Link>
+            </div>
+          ))}
+      </div>
+    );
+  };
+
   return (
     <div className="container-fluid">
       <div className="pt-3 pb-3">{searchForm()}</div>
+      {searched && (
+        <div style={{ marginTop: '-95px', marginBottom: '-80px' }}>
+          {searchedBlog(results)}
+        </div>
+      )}
     </div>
   );
 };
