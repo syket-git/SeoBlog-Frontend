@@ -17,6 +17,7 @@ export const createBlog = ({
   setFeaturedImage,
   setBody,
   setTitle,
+  token,
 }) => async (dispatch) => {
   const formData = new FormData();
   formData.append('title', title);

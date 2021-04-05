@@ -4,6 +4,7 @@ import Router from 'next/router';
 import dynamic from 'next/dynamic';
 import { withRouter } from 'next/router';
 import { createBlog } from '../../../actions/blog';
+import { getCookie } from '../../../actions/auth';
 import { useForm } from 'react-hook-form';
 import { useSelector, connect } from 'react-redux';
 import style from './CreateBlog.module.css';
@@ -53,11 +54,15 @@ const CreateBlog = ({ createBlog }) => {
   const [uploading, setUploading] = useState(false);
   const { handleSubmit, errors, register, reset } = useForm();
 
+  const token = getCookie('token');
+
   const submit = (data) => {
     if (selectedCategory.length <= 0) {
       toast.error('Please select at least one category');
     } else if (selectedTag.length <= 0) {
       toast.error('Please select at least one tag');
+    } else if (token === null) {
+      toast.error('Invalid token');
     } else {
       createBlog({
         title: title,
@@ -71,6 +76,7 @@ const CreateBlog = ({ createBlog }) => {
         setSelectedTag,
         setBody,
         setTitle,
+        token,
       });
     }
   };
